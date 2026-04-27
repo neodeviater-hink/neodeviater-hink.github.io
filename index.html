@@ -2,12 +2,307 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>KBO 띠부실 도구 모음</title>
+  <meta name="description" content="KBO 야구 띠부실 스티커를 쉽게 만들고 관리하는 무료 도구 모음입니다.">
+  <style>
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d27;
+      --surface2: #222636;
+      --border: #2e3248;
+      --accent: #4f8ef7;
+      --accent2: #f7924f;
+      --text: #e8eaf0;
+      --text-muted: #8b8fa8;
+      --green: #3ecf8e;
+      --radius: 14px;
+    }
+ 
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+ 
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Pretendard', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+ 
+    /* Header */
+    header {
+      background: linear-gradient(135deg, #0d1b3e 0%, #1a1340 50%, #0f1117 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 48px 24px 40px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    header::before {
+      content: '⚾';
+      position: absolute;
+      font-size: 240px;
+      opacity: .04;
+      top: -40px;
+      right: -30px;
+      line-height: 1;
+      pointer-events: none;
+    }
+    .badge {
+      display: inline-block;
+      background: rgba(79,142,247,.15);
+      color: var(--accent);
+      border: 1px solid rgba(79,142,247,.3);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      padding: 4px 12px;
+      border-radius: 100px;
+      margin-bottom: 16px;
+      text-transform: uppercase;
+    }
+    header h1 {
+      font-size: clamp(26px, 5vw, 42px);
+      font-weight: 800;
+      letter-spacing: -.02em;
+      margin-bottom: 10px;
+    }
+    header h1 span { color: var(--accent); }
+    header p {
+      color: var(--text-muted);
+      font-size: 15px;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+ 
+    /* Ad slot */
+    .ad-slot {
+      background: var(--surface);
+      border: 1px dashed var(--border);
+      border-radius: var(--radius);
+      text-align: center;
+      padding: 16px;
+      color: var(--text-muted);
+      font-size: 12px;
+      margin: 24px auto;
+      max-width: 860px;
+      min-height: 90px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+ 
+    /* Main */
+    main {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 32px 20px 60px;
+    }
+ 
+    .section-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+ 
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 16px;
+      margin-bottom: 48px;
+    }
+ 
+    /* Tool card */
+    .tool-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      transition: transform .18s, border-color .18s, box-shadow .18s;
+      position: relative;
+      overflow: hidden;
+    }
+    .tool-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--accent);
+      box-shadow: 0 8px 32px rgba(79,142,247,.15);
+    }
+    .tool-card.featured {
+      border-color: rgba(79,142,247,.4);
+      background: linear-gradient(135deg, #1a1d27 60%, #1a2240 100%);
+      grid-column: 1 / -1;
+      flex-direction: row;
+      align-items: flex-start;
+      gap: 20px;
+    }
+    .tool-card.featured:hover {
+      box-shadow: 0 12px 40px rgba(79,142,247,.2);
+    }
+ 
+    .card-icon {
+      font-size: 32px;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+    .featured .card-icon { font-size: 52px; }
+ 
+    .card-body { flex: 1; }
+ 
+    .card-tag {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      padding: 2px 8px;
+      border-radius: 100px;
+      margin-bottom: 6px;
+    }
+    .tag-hot  { background: rgba(247,146,79,.15);  color: var(--accent2); }
+    .tag-free { background: rgba(79,142,247,.15);  color: var(--accent); }
+    .tag-soon { background: rgba(139,143,168,.12); color: var(--text-muted); }
+ 
+    .card-title {
+      font-size: 17px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .featured .card-title { font-size: 22px; }
+ 
+    .card-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.55;
+    }
+ 
+    .card-arrow {
+      align-self: flex-end;
+      font-size: 20px;
+      color: var(--accent);
+      opacity: 0;
+      transition: opacity .18s, transform .18s;
+    }
+    .tool-card:hover .card-arrow { opacity: 1; transform: translateX(3px); }
+ 
+    .tool-card.soon {
+      opacity: .5;
+      cursor: default;
+      pointer-events: none;
+    }
+ 
+    /* Info bar */
+    .info-bar {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px 22px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 32px;
+    }
+    .info-bar .icon { font-size: 20px; flex-shrink: 0; }
+    .info-bar strong { color: var(--text); }
+ 
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--border);
+      text-align: center;
+      padding: 28px 20px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    footer a { color: var(--accent); text-decoration: none; }
+ 
+    @media (max-width: 540px) {
+      .tool-card.featured { flex-direction: column; }
+      .featured .card-icon { font-size: 36px; }
+    }
+  </style>
 </head>
 <body>
-  <h1>KBO 띠부실 도구 모음</h1>
-  <ul>
-    <li><a href="/kbo-sticker/">띠부실 일괄 생성기</a></li>
-  </ul>
+ 
+<header>
+  <div class="badge">⚾ KBO Tools</div>
+  <h1>KBO 띠부실 <span>도구 모음</span></h1>
+  <p>KBO 야구 띠부실 스티커를 더 쉽고 빠르게 만들어 드립니다</p>
+</header>
+ 
+<div style="max-width:860px;margin:0 auto;padding:0 20px;">
+  <div class="ad-slot">
+    <!-- Google AdSense 코드 삽입 위치 -->
+    광고 영역
+  </div>
+</div>
+ 
+<main>
+  <p class="section-label">🛠 도구</p>
+ 
+  <div class="tools-grid">
+ 
+    <a href="/kbo-sticker/" class="tool-card featured">
+      <div class="card-icon">🏷️</div>
+      <div class="card-body">
+        <span class="card-tag tag-hot">인기</span>
+        <div class="card-title">띠부실 일괄 생성기</div>
+        <div class="card-desc">
+          팀별 선수 목록을 입력하면 KBO 스타일의 띠부실 스티커 이미지를 자동으로 만들어 드립니다.
+          인쇄용 레이아웃까지 한 번에 완성하세요.
+        </div>
+      </div>
+      <div class="card-arrow">→</div>
+    </a>
+ 
+    <div class="tool-card soon">
+      <div class="card-icon">📐</div>
+      <div class="card-body">
+        <span class="card-tag tag-soon">준비중</span>
+        <div class="card-title">스티커 레이아웃 편집기</div>
+        <div class="card-desc">인쇄 용지에 맞춰 스티커 배치를 직접 조정하는 편집기</div>
+      </div>
+    </div>
+ 
+    <div class="tool-card soon">
+      <div class="card-icon">🎨</div>
+      <div class="card-body">
+        <span class="card-tag tag-soon">준비중</span>
+        <div class="card-title">팀 색상 커스터마이저</div>
+        <div class="card-desc">팀별 고유 색상을 적용한 나만의 스티커 테마 제작</div>
+      </div>
+    </div>
+ 
+  </div>
+ 
+  <div class="info-bar">
+    <span class="icon">💡</span>
+    <div>
+      <strong>무료로 사용 가능합니다.</strong>
+      모든 도구는 브라우저에서 바로 실행되며 별도 설치나 가입이 필요 없습니다.
+      인쇄는 퍼블로그(publog.co.kr) 등 전문 업체를 이용하시면 더욱 선명하게 출력됩니다.
+    </div>
+  </div>
+ 
+  <div class="ad-slot">
+    <!-- Google AdSense 코드 삽입 위치 -->
+    광고 영역
+  </div>
+ 
+</main>
+ 
+<footer>
+  <p>KBO 띠부실 도구 모음 &nbsp;·&nbsp; 팬이 만든 비공식 도구입니다 &nbsp;·&nbsp;
+  문의: <a href="https://github.com/neodeviater-hink/kbo-sticker/issues" target="_blank">GitHub Issues</a></p>
+</footer>
+ 
 </body>
 </html>
