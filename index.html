@@ -1,300 +1,1006 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>KBO 띠부실 도구 모음</title>
-  <meta name="description" content="KBO 야구 띠부실 스티커를 쉽게 만들고 관리하는 무료 도구 모음입니다.">
-  <style>
-    :root {
-      --bg: #0f1117;
-      --surface: #1a1d27;
-      --surface2: #222636;
-      --border: #2e3248;
-      --accent: #4f8ef7;
-      --accent2: #f7924f;
-      --text: #e8eaf0;
-      --text-muted: #8b8fa8;
-      --green: #3ecf8e;
-      --radius: 14px;
-    }
- 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
- 
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Pretendard', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
-      line-height: 1.6;
-      min-height: 100vh;
-    }
- 
-    /* Header */
-    header {
-      background: linear-gradient(135deg, #0d1b3e 0%, #1a1340 50%, #0f1117 100%);
-      border-bottom: 1px solid var(--border);
-      padding: 48px 24px 40px;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
-    header::before {
-      content: '⚾';
-      position: absolute;
-      font-size: 240px;
-      opacity: .04;
-      top: -40px;
-      right: -30px;
-      line-height: 1;
-      pointer-events: none;
-    }
-    .badge {
-      display: inline-block;
-      background: rgba(79,142,247,.15);
-      color: var(--accent);
-      border: 1px solid rgba(79,142,247,.3);
-      font-size: 12px;
-      font-weight: 700;
-      letter-spacing: .08em;
-      padding: 4px 12px;
-      border-radius: 100px;
-      margin-bottom: 16px;
-      text-transform: uppercase;
-    }
-    header h1 {
-      font-size: clamp(26px, 5vw, 42px);
-      font-weight: 800;
-      letter-spacing: -.02em;
-      margin-bottom: 10px;
-    }
-    header h1 span { color: var(--accent); }
-    header p {
-      color: var(--text-muted);
-      font-size: 15px;
-      max-width: 500px;
-      margin: 0 auto;
-    }
- 
-    /* Ad slot */
-    .ad-slot {
-      background: var(--surface);
-      border: 1px dashed var(--border);
-      border-radius: var(--radius);
-      text-align: center;
-      padding: 16px;
-      color: var(--text-muted);
-      font-size: 12px;
-      margin: 24px auto;
-      max-width: 860px;
-      min-height: 90px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
- 
-    /* Main */
-    main {
-      max-width: 860px;
-      margin: 0 auto;
-      padding: 32px 20px 60px;
-    }
- 
-    .section-label {
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: .1em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      margin-bottom: 16px;
-    }
- 
-    .tools-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 16px;
-      margin-bottom: 48px;
-    }
- 
-    /* Tool card */
-    .tool-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 24px;
-      text-decoration: none;
-      color: inherit;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      transition: transform .18s, border-color .18s, box-shadow .18s;
-      position: relative;
-      overflow: hidden;
-    }
-    .tool-card:hover {
-      transform: translateY(-3px);
-      border-color: var(--accent);
-      box-shadow: 0 8px 32px rgba(79,142,247,.15);
-    }
-    .tool-card.featured {
-      border-color: rgba(79,142,247,.4);
-      background: linear-gradient(135deg, #1a1d27 60%, #1a2240 100%);
-      grid-column: 1 / -1;
-      flex-direction: row;
-      align-items: flex-start;
-      gap: 20px;
-    }
-    .tool-card.featured:hover {
-      box-shadow: 0 12px 40px rgba(79,142,247,.2);
-    }
- 
-    .card-icon {
-      font-size: 32px;
-      line-height: 1;
-      flex-shrink: 0;
-    }
-    .featured .card-icon { font-size: 52px; }
- 
-    .card-body { flex: 1; }
- 
-    .card-tag {
-      display: inline-block;
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: .08em;
-      text-transform: uppercase;
-      padding: 2px 8px;
-      border-radius: 100px;
-      margin-bottom: 6px;
-    }
-    .tag-hot  { background: rgba(247,146,79,.15);  color: var(--accent2); }
-    .tag-free { background: rgba(79,142,247,.15);  color: var(--accent); }
-    .tag-soon { background: rgba(139,143,168,.12); color: var(--text-muted); }
- 
-    .card-title {
-      font-size: 17px;
-      font-weight: 700;
-      margin-bottom: 6px;
-    }
-    .featured .card-title { font-size: 22px; }
- 
-    .card-desc {
-      font-size: 13px;
-      color: var(--text-muted);
-      line-height: 1.55;
-    }
- 
-    .card-arrow {
-      align-self: flex-end;
-      font-size: 20px;
-      color: var(--accent);
-      opacity: 0;
-      transition: opacity .18s, transform .18s;
-    }
-    .tool-card:hover .card-arrow { opacity: 1; transform: translateX(3px); }
- 
-    .tool-card.soon {
-      opacity: .5;
-      cursor: default;
-      pointer-events: none;
-    }
- 
-    /* Info bar */
-    .info-bar {
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 18px 22px;
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      font-size: 13px;
-      color: var(--text-muted);
-      margin-bottom: 32px;
-    }
-    .info-bar .icon { font-size: 20px; flex-shrink: 0; }
-    .info-bar strong { color: var(--text); }
- 
-    /* Footer */
-    footer {
-      border-top: 1px solid var(--border);
-      text-align: center;
-      padding: 28px 20px;
-      font-size: 12px;
-      color: var(--text-muted);
-    }
-    footer a { color: var(--accent); text-decoration: none; }
- 
-    @media (max-width: 540px) {
-      .tool-card.featured { flex-direction: column; }
-      .featured .card-icon { font-size: 36px; }
-    }
-  </style>
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4879841792654029"
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KBO 띠부실 생성기</title>
+<link rel="stylesheet" href="https://hangeul.pstatic.net/hangeul_static/css/nanum-square.css">
+<style>
+  :root {
+    --bg:#f4f3f8; --card:#ffffff; --card2:#f0eef8;
+    --border:#e0dced; --text:#1a1a2e; --sub:#6b6880; --accent:#7C4DFF;
+    --accent-dark:#651FFF; --accent-light:#EDE7FF;
+    --accent2:#03C75A; --header-start:#6C3AED; --header-end:#03C75A;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    background:var(--bg);color:var(--text);
+    font-family:'Apple SD Gothic Neo','Malgun Gothic','맑은 고딕',sans-serif;
+    min-height:100vh;padding:24px;max-width:1100px;margin:0 auto;
+  }
+  /* 상단 헤더 바 */
+  .site-header{
+    background:linear-gradient(120deg, var(--header-start) 0%, var(--header-end) 100%);
+    border-radius:10px;
+    padding:18px 28px 14px;margin-bottom:20px;
+    display:flex;flex-direction:column;align-items:center;
+  }
+  h1{
+    font-size:22px;font-weight:800;color:#fff;letter-spacing:-0.3px;
+  }
+  .subtitle{text-align:center;color:rgba(255,255,255,0.82);font-size:13px;margin-top:5px;}
+
+  .panel{
+    background:var(--card);border:1px solid var(--border);border-radius:10px;
+    padding:18px 22px;margin-bottom:16px;
+    box-shadow:0 1px 4px rgba(108,58,237,.07);
+  }
+  .panel-title{
+    font-size:14px;font-weight:700;color:var(--text);margin-bottom:14px;
+    display:flex;align-items:center;gap:6px;
+    border-bottom:2px solid var(--accent);padding-bottom:9px;
+    background:linear-gradient(90deg,var(--accent),var(--accent2));
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  }
+
+  /* 팀 그리드 */
+  .team-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;}
+  @media(max-width:600px){.team-grid{grid-template-columns:repeat(2,1fr);}}
+  .team-btn{
+    border:2px solid var(--border);border-radius:8px;padding:8px 5px;
+    cursor:pointer;text-align:center;transition:all .15s;
+    font-size:11px;font-weight:700;position:relative;background:var(--card);
+  }
+  .team-btn:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.12);}
+  .team-btn.selected{border-color:var(--accent);transform:translateY(-2px);box-shadow:0 0 0 2px rgba(124,77,255,.22),0 4px 12px rgba(0,0,0,.12);}
+  .team-check{position:absolute;top:4px;right:4px;width:16px;height:16px;background:var(--accent);border-radius:50%;font-size:9px;font-weight:900;color:#fff;display:none;align-items:center;justify-content:center;}
+  .team-btn.selected .team-check{display:flex;}
+  .color-bar{height:40px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;padding:0 4px;text-align:center;line-height:1.25;}
+
+  /* 2단 레이아웃 */
+  .two-col{display:grid;grid-template-columns:1fr 300px;gap:16px;align-items:stretch;}
+  @media(max-width:780px){.two-col{grid-template-columns:1fr;}}
+
+  /* 실시간 미리보기 캔버스 */
+  .live-preview-wrap{
+    background:var(--card2);border-radius:10px;border:1px solid var(--border);
+    display:flex;align-items:center;justify-content:center;
+    padding:20px;min-height:260px;position:sticky;top:16px;
+  }
+  #liveCanvas{
+    border-radius:6px;box-shadow:0 4px 16px rgba(0,0,0,.15);
+    max-width:240px;max-height:240px;width:100%;height:auto;
+    background: repeating-conic-gradient(#ddd 0% 25%, #f0f0f0 0% 50%) 0 0/16px 16px;
+  }
+  .live-placeholder{color:var(--sub);font-size:12px;text-align:center;line-height:1.8;}
+
+  /* 로고 썸네일 */
+  .logo-thumb{
+    width:72px;height:72px;border-radius:8px;background:var(--card2);
+    border:2px dashed var(--border);overflow:hidden;flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;font-size:11px;
+    color:var(--sub);font-weight:600;
+    cursor:pointer;transition:border-color .2s;
+  }
+  .logo-thumb:hover{border-color:var(--accent);}
+  .logo-thumb img{width:100%;height:100%;object-fit:contain;display:block;}
+
+  /* 슬라이더 그룹 */
+  .slider-group{display:flex;flex-direction:column;gap:10px;}
+  .slider-row{display:grid;grid-template-columns:80px 1fr 48px;align-items:center;gap:8px;}
+  .slider-label{font-size:12px;color:var(--sub);font-weight:600;}
+  .slider-row input[type=range]{width:100%;accent-color:var(--accent);}
+  .slider-val{
+    font-size:12px;font-weight:700;color:var(--accent);
+    width:48px;text-align:center;
+    border:1.5px solid var(--border);border-radius:5px;
+    padding:2px 3px;background:var(--accent-light);
+    outline:none;cursor:text;
+    -moz-appearance:textfield;
+  }
+  .slider-val:focus{border-color:var(--accent);background:#fff;box-shadow:0 0 0 2px rgba(124,77,255,.15);}
+  .slider-val::-webkit-outer-spin-button,
+  .slider-val::-webkit-inner-spin-button{-webkit-appearance:none;margin:0;}
+  .section-sub{font-size:12px;color:var(--sub);font-weight:600;margin-bottom:8px;margin-top:4px;padding-bottom:4px;border-bottom:1px solid var(--border);}
+
+  /* 배지 스타일 선택 */
+  .badge-style-row{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:10px;}
+  .badge-style-opt{
+    border:2px solid var(--border);border-radius:8px;padding:8px 4px;
+    cursor:pointer;transition:all .15s;text-align:center;background:var(--card2);min-width:0;
+  }
+  .badge-style-opt:hover{border-color:#aaa;background:#eef0f3;}
+  .badge-style-opt.selected{border-color:var(--accent);background:var(--accent-light);box-shadow:0 0 0 1px rgba(124,77,255,.25);}
+  .badge-style-opt .preview{
+    height:34px;border-radius:6px;background:#C30452;
+    display:flex;align-items:center;justify-content:flex-start;
+    margin-bottom:6px;overflow:hidden;gap:0;transition:background .15s;
+  }
+  .badge-style-opt .lbl{font-size:11px;color:var(--sub);font-weight:600;}
+  .badge-style-opt.selected .lbl{color:var(--accent);font-weight:700;}
+
+  /* 버튼 */
+  .btn-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+  .btn{padding:11px 20px;border-radius:8px;border:none;cursor:pointer;font-size:14px;font-weight:700;transition:all .15s;display:flex;align-items:center;gap:7px;}
+  .btn:hover:not(:disabled){opacity:.88;transform:translateY(-1px);}
+  .btn:disabled{opacity:.38;cursor:not-allowed;}
+  .btn-red  {background:linear-gradient(120deg,var(--accent),var(--accent2));color:#fff;}
+  .btn-green{background:linear-gradient(120deg,var(--accent-dark),var(--accent));color:#fff;}
+  .btn-gray {background:#fff;color:var(--text);border:1.5px solid var(--border);}
+  .btn-gray:hover:not(:disabled){background:var(--card2);border-color:#bbb;}
+
+  /* 진행 */
+  .progress-wrap{display:none;margin-top:12px;}
+  .progress-bar{height:6px;background:var(--border);border-radius:4px;overflow:hidden;margin-bottom:5px;}
+  .progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:4px;transition:width .2s;width:0%;}
+  .progress-text{font-size:12px;color:var(--sub);}
+
+  /* 상태 */
+  .status{margin-top:10px;padding:9px 13px;background:var(--card2);border-radius:7px;font-size:13px;color:var(--sub);border:1px solid var(--border);}
+  .status.ok {color:#5527A8;background:#EDE7FF;border-color:#c9b8ff;}
+  .status.err{color:#c0392b;background:#fef0ef;border-color:#f5c0bc;}
+
+  /* 로고+이름표 2열 → 모바일 1열 */
+  @media(max-width:600px){
+    .logo-badge-grid{grid-template-columns:1fr !important;}
+  }
+
+  /* 미리보기 그리드 */
+  .preview-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+  .preview-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:12px;}
+  .preview-name{font-size:11px;color:var(--sub);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .empty-state{
+    text-align:center;padding:28px 20px;color:var(--sub);
+    border:2px dashed var(--border);border-radius:10px;
+    background:var(--card2);
+  }
+  .empty-state .empty-icon{
+    width:44px;height:44px;border-radius:50%;
+    background:linear-gradient(135deg,var(--accent-light),#fff);
+    border:1.5px solid var(--border);
+    display:flex;align-items:center;justify-content:center;
+    margin:0 auto 10px;
+  }
+  .empty-state .empty-icon svg{opacity:.55;}
+  .empty-state .empty-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px;opacity:.7;}
+  .empty-state .empty-desc{font-size:12px;line-height:1.6;}
+
+  /* 로고 스타일 선택 */
+  .logo-style-row{display:flex;gap:6px;margin-top:12px;}
+  .logo-style-opt{
+    flex:1;border:2px solid var(--border);border-radius:7px;padding:7px 4px;
+    cursor:pointer;transition:all .15s;text-align:center;background:var(--card2);
+    font-size:12px;color:var(--sub);font-weight:600;
+  }
+  .logo-style-opt:hover{border-color:#aaa;color:var(--text);background:#eef0f3;}
+  .logo-style-opt.selected{border-color:var(--accent);background:var(--accent-light);color:var(--accent);}
+
+  #fileInput,#logoInput{display:none;}
+
+  /* 사용 설명 */
+  .guide-panel{padding:14px 20px;}
+  .guide-steps{display:flex;flex-direction:column;gap:8px;}
+  .guide-step{display:flex;align-items:flex-start;gap:10px;}
+  .guide-num{
+    min-width:22px;height:22px;border-radius:50%;
+    background:var(--accent);color:#fff;
+    font-size:11px;font-weight:800;
+    display:flex;align-items:center;justify-content:center;
+    flex-shrink:0;margin-top:1px;
+  }
+  .guide-text{font-size:12px;color:var(--sub);line-height:1.6;}
+  .guide-text strong{color:var(--text);font-weight:700;}
+  .guide-text code{
+    background:var(--card2);border:1px solid var(--border);
+    border-radius:4px;padding:1px 5px;font-size:11px;
+    color:var(--accent);font-family:monospace;
+  }
+
+  /* 체크박스 — 캔버스 아래로 */
+  .preview-item{text-align:center;cursor:pointer;position:relative;}
+  .preview-item canvas{
+    border-radius:6px;border:1.5px solid var(--border);
+    box-shadow:0 2px 8px rgba(0,0,0,.10);
+    max-width:100%;display:block;margin:0 auto;
+    transition:transform .15s, box-shadow .15s;
+    background: repeating-conic-gradient(#e8e8e8 0% 25%, #f5f5f5 0% 50%) 0 0/12px 12px;
+  }
+  .preview-item:hover canvas{transform:scale(1.02);box-shadow:0 4px 14px rgba(0,0,0,.16);}
+  .preview-item.checked canvas{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent),0 3px 10px rgba(0,0,0,.14) !important;}
+  .preview-check{
+    display:flex;align-items:center;justify-content:center;gap:5px;
+    margin-top:5px;padding:3px 6px;border-radius:5px;
+    border:1.5px solid var(--border);background:#fff;
+    font-size:10px;font-weight:600;color:var(--sub);
+    cursor:pointer;transition:all .15s;user-select:none;
+  }
+  .preview-check .chk-box{
+    width:13px;height:13px;border-radius:3px;border:1.5px solid var(--border);
+    background:#fff;flex-shrink:0;display:flex;align-items:center;justify-content:center;
+    transition:all .15s;
+  }
+  .preview-item.checked .preview-check{border-color:var(--accent);background:var(--accent-light);color:var(--accent);}
+  .preview-item.checked .chk-box{background:var(--accent);border-color:var(--accent);}
+
+  /* 빈 상태 플레이스홀더 카드 */
+  .empty-card{
+    border-radius:6px;border:1.5px dashed var(--border);
+    background:var(--card2);aspect-ratio:1;
+    display:flex;align-items:center;justify-content:center;
+    color:var(--border);font-size:20px;
+  }
+</style>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4879841792654029"
      crossorigin="anonymous"></script>
 </head>
 <body>
- 
-<header>
-  <div class="badge">⚾ KBO Tools</div>
-  <h1>KBO 띠부실 <span>도구 모음</span></h1>
-  <p>KBO 야구 띠부실 스티커를 더 쉽고 빠르게 만들어 드립니다</p>
-</header>
- 
-<div style="max-width:860px;margin:0 auto;padding:0 20px;">
+
+<div class="site-header">
+  <h1>KBO선수 띠부실 생성기</h1>
+  <p class="subtitle" style="margin-top:3px;">제작 : 쌍마 - 나도CK</p>
 </div>
- 
-<main>
-  <p class="section-label">🛠 도구</p>
- 
-  <div class="tools-grid">
- 
-    <a href="/kbo-sticker/" class="tool-card featured">
-      <div class="card-icon">🏷️</div>
-      <div class="card-body">
-        <span class="card-tag tag-hot">인기</span>
-        <div class="card-title">띠부실 일괄 생성기</div>
-        <div class="card-desc">
-          팀별 선수 목록을 입력하면 KBO 스타일의 띠부실 스티커 이미지를 자동으로 만들어 드립니다.
-          인쇄용 레이아웃까지 한 번에 완성하세요.
+  <div class="ad-slot">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4879841792654029" crossorigin="anonymous"></script>
+    <ins class="adsbygoogle" ...></ins>
+    <script>...</script>
+  </div>
+<!-- 사용 설명 -->
+<div class="panel guide-panel">
+  <div class="panel-title" style="margin-bottom:10px;">사용 방법</div>
+  <div class="guide-steps">
+    <div class="guide-step">
+      <div class="guide-num">1</div>
+      <div class="guide-text"><strong>팀 선택</strong> — 아래 팀 색상 그리드에서 구단을 선택하면 이름표 색상이 자동으로 적용됩니다.</div>
+    </div>
+    <div class="guide-step">
+      <div class="guide-num">2</div>
+      <div class="guide-text"><strong>선수 사진 불러오기</strong> — 여러 장을 한 번에 선택할 수 있습니다. 파일명을 <code>등번호_이름</code> 형식으로 저장하면 등번호와 이름을 자동 인식합니다.</div>
+    </div>
+    <div class="guide-step">
+      <div class="guide-num">3</div>
+      <div class="guide-text"><strong>팀 로고 설정</strong> — 팀 로고 이미지를 올리고 위치·크기를 조절합니다. 투명 배경(원본), 사각형, 원형 중 레이어 스타일을 선택할 수 있습니다.</div>
+    </div>
+    <div class="guide-step">
+      <div class="guide-num">4</div>
+      <div class="guide-text"><strong>이름표 스타일·위치</strong> — 원형·사각형 번호, 세로선 구분, 이름만 중 스타일을 고르고 위치와 크기를 슬라이더로 조절합니다.</div>
+    </div>
+    <div class="guide-step">
+      <div class="guide-num">5</div>
+      <div class="guide-text"><strong>저장</strong> — 아래 전체 미리보기에서 원하는 이미지를 체크하여 선택 다운로드하거나, 전체 다운로드로 한꺼번에 저장합니다.</div>
+    </div>
+    <div class="guide-step">
+      <div class="guide-num">6</div>
+      <div class="guide-text"><strong>출력</strong> — 인쇄는 전문 업체 이용하시는 것을 권장하며, 판띠부실 같은 한장짜리에 잘 배치해서 뽑으시면 효율적입니다. 퍼블로그(www.publog.co.kr/) 같은 업체 다양하게 있습니다.
+      <img src="https://github.com/neodeviater-hink/kbo-sticker/blob/main/example.png?raw=true" style="max-width:260px;width:100%;border-radius:8px;border:1px solid #ddd;display:block;margin-top:10px;box-shadow:0 2px 8px rgba(0,0,0,.1);">
+    </div>
+</div>
+  </div>
+</div>
+
+<!-- 팀 색상 -->
+<div class="panel">
+  <div class="panel-title">팀 색상</div>
+  <div class="team-grid" id="teamGrid"></div>
+</div>
+
+<!-- 2단: 사진 불러오기 + 이미지 조절 | 실시간 미리보기 -->
+<div class="two-col" style="margin-bottom:16px;">
+  <div style="display:flex;flex-direction:column;">
+    <div class="panel" style="flex:1;margin-bottom:0;">
+      <div class="panel-title">사진 불러오기 & 이미지 조절</div>
+      <div style="display:grid;grid-template-columns:auto 1fr;gap:16px 24px;align-items:start;">
+        <!-- 좌: 버튼 -->
+        <div style="display:flex;flex-direction:column;gap:8px;min-width:180px;">
+          <button class="btn btn-red" style="width:100%;justify-content:center;" onclick="document.getElementById('fileInput').click()">선수 사진 불러오기</button>
+        </div>
+        <!-- 우: 이미지 조절 슬라이더 -->
+        <div class="slider-group" style="padding-top:2px;">
+          <div class="slider-row">
+            <span class="slider-label">이미지 크기</span>
+            <input type="range" id="imgScale" min="50" max="200" value="100" oninput="onSlider('imgScale',this.value,'%')">
+            <input type="number" class="slider-val" id="imgScaleVal" value="100" min="50" max="200" data-unit="%" onchange="onValInput('imgScale',this)" onkeydown="if(event.key==='Enter')this.blur()">
+          </div>
+          <div class="slider-row">
+            <span class="slider-label">가로 위치</span>
+            <input type="range" id="imgXOffset" min="-50" max="50" value="0" oninput="onSlider('imgXOffset',this.value,'%')">
+            <input type="number" class="slider-val" id="imgXOffsetVal" value="0" min="-50" max="50" data-unit="%" onchange="onValInput('imgXOffset',this)" onkeydown="if(event.key==='Enter')this.blur()">
+          </div>
+          <div class="slider-row">
+            <span class="slider-label">세로 위치</span>
+            <input type="range" id="imgYOffset" min="-50" max="50" value="0" oninput="onSlider('imgYOffset',this.value,'%')">
+            <input type="number" class="slider-val" id="imgYOffsetVal" value="0" min="-50" max="50" data-unit="%" onchange="onValInput('imgYOffset',this)" onkeydown="if(event.key==='Enter')this.blur()">
+          </div>
         </div>
       </div>
-      <div class="card-arrow">→</div>
-    </a>
- 
-    <div class="tool-card soon">
-      <div class="card-icon">📐</div>
-      <div class="card-body">
-        <span class="card-tag tag-soon">준비중</span>
-        <div class="card-title">스티커 레이아웃 편집기</div>
-        <div class="card-desc">인쇄 용지에 맞춰 스티커 배치를 직접 조정하는 편집기</div>
+      <input type="file" id="fileInput" multiple accept="image/png,image/jpeg,image/webp" onchange="onFilesSelected(this)">
+      <div class="progress-wrap" id="progressWrap" style="margin-top:10px;">
+        <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+        <div class="progress-text" id="progressText"></div>
       </div>
-    </div>
- 
-    <div class="tool-card soon">
-      <div class="card-icon">🎨</div>
-      <div class="card-body">
-        <span class="card-tag tag-soon">준비중</span>
-        <div class="card-title">팀 색상 커스터마이저</div>
-        <div class="card-desc">팀별 고유 색상을 적용한 나만의 스티커 테마 제작</div>
-      </div>
-    </div>
- 
-  </div>
- 
-  <div class="info-bar">
-    <span class="icon">💡</span>
-    <div>
-      <strong>무료로 사용 가능합니다.</strong>
-      모든 도구는 브라우저에서 바로 실행되며 별도 설치나 가입이 필요 없습니다.
-      인쇄는 퍼블로그(publog.co.kr) 등 전문 업체를 이용하시면 더욱 선명하게 출력됩니다.
+      <div class="status" id="statusBox" style="margin-top:8px;">선수 사진을 불러오세요.</div>
     </div>
   </div>
-</main>
- 
-<footer>
-  <p>KBO 띠부실 도구 모음 &nbsp;·&nbsp; 팬이 만든 비공식 도구입니다 &nbsp;·&nbsp;
-  문의: <a href="https://github.com/neodeviater-hink/kbo-sticker/issues" target="_blank">GitHub Issues</a></p>
-</footer>
- 
+
+  <!-- 실시간 미리보기 -->
+  <div class="live-preview-wrap" id="liveWrap">
+    <div class="live-placeholder" id="livePlaceholder">
+      <div style="width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--accent-light),#fff);border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;margin:0 auto 12px;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7C4DFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="opacity:.6;">
+          <rect x="3" y="3" width="18" height="18" rx="3"/>
+          <circle cx="8.5" cy="8.5" r="1.5"/>
+          <polyline points="21 15 16 10 5 21"/>
+        </svg>
+      </div>
+      사진을 불러오면<br>여기서 실시간으로<br>확인할 수 있어요
+    </div>
+    <canvas id="liveCanvas" style="display:none"></canvas>
+  </div>
+</div>
+
+<!-- 로고 + 이름표 2열 -->
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:stretch;margin-bottom:16px;" class="logo-badge-grid">
+
+<!-- 로고 업로드 -->
+<div class="panel" style="margin-bottom:0;height:100%;box-sizing:border-box;">
+  <div class="panel-title">팀 로고 <span style="font-size:11px;color:var(--sub);font-weight:400">(선택사항)</span></div>
+
+  <!-- 썸네일(좌) + 슬라이더(우) -->
+  <div style="display:flex;gap:14px;align-items:flex-start;">
+    <!-- 썸네일 + 파일명 -->
+    <div style="flex-shrink:0;text-align:center;">
+      <div class="logo-thumb" id="logoThumb" onclick="document.getElementById('logoInput').click()">업로드</div>
+      <div id="logoName" style="font-size:11px;color:var(--sub);margin-top:5px;width:72px;word-break:break-all;line-height:1.3;">클릭하여 업로드</div>
+    </div>
+    <!-- 슬라이더 -->
+    <div style="flex:1;min-width:0;">
+      <div class="slider-group" id="logoSliderGroup" style="opacity:0.35;pointer-events:none;">
+        <div class="slider-row">
+          <span class="slider-label">가로 위치</span>
+          <input type="range" id="logoX" min="10" max="90" value="78" oninput="onSlider('logoX',this.value,'%')">
+          <input type="number" class="slider-val" id="logoXVal" value="78" min="10" max="90" data-unit="%" onchange="onValInput('logoX',this)" onkeydown="if(event.key==='Enter')this.blur()">
+        </div>
+        <div class="slider-row">
+          <span class="slider-label">세로 위치</span>
+          <input type="range" id="logoY" min="10" max="90" value="78" oninput="onSlider('logoY',this.value,'%')">
+          <input type="number" class="slider-val" id="logoYVal" value="78" min="10" max="90" data-unit="%" onchange="onValInput('logoY',this)" onkeydown="if(event.key==='Enter')this.blur()">
+        </div>
+        <div class="slider-row">
+          <span class="slider-label">크기</span>
+          <input type="range" id="logoSize" min="5" max="30" value="14" oninput="onSlider('logoSize',this.value,'%')">
+          <input type="number" class="slider-val" id="logoSizeVal" value="14" min="5" max="30" data-unit="%" onchange="onValInput('logoSize',this)" onkeydown="if(event.key==='Enter')this.blur()">
+        </div>
+      </div>
+      <span id="logoNoUpload" style="font-size:10px;color:var(--sub);">로고 업로드 후 슬라이더가 활성화됩니다</span>
+    </div>
+  </div>
+
+  <input type="file" id="logoInput" accept="image/*" onchange="onLogoSelected(this)">
+
+  <!-- 로고 레이어 스타일 — 텍스트만 -->
+  <div class="logo-style-row">
+    <div class="logo-style-opt selected" id="lsOpt_none" onclick="setLogoStyle('none',this)">원본투명배경</div>
+    <div class="logo-style-opt" id="lsOpt_rect" onclick="setLogoStyle('rect',this)">사각형</div>
+    <div class="logo-style-opt" id="lsOpt_circle" onclick="setLogoStyle('circle',this)">원형</div>
+  </div>
+</div>
+
+<!-- 이름표 설정 -->
+<div class="panel" style="margin-bottom:0;height:100%;box-sizing:border-box;">
+  <div class="panel-title">이름표 스타일 / 위치 / 크기</div>
+
+  <!-- 배지 스타일 선택 -->
+  <div class="badge-style-row" style="margin-bottom:14px;">
+    <div class="badge-style-opt" id="bsOpt_circle" onclick="setBadgeStyle('circle',this)">
+      <div class="preview" id="bsPrev_circle">
+        <div id="bsCircle" style="width:26px;height:26px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;margin-left:6px;flex-shrink:0;">
+          <span id="bsCircleNum" style="font-size:9px;font-weight:900;color:#C30452">11</span>
+        </div>
+        <span style="font-size:10px;font-weight:800;color:#fff;flex:1;text-align:center;">홍길동</span>
+      </div>
+      <div class="lbl">원형 번호</div>
+    </div>
+    <div class="badge-style-opt" id="bsOpt_rectnum" onclick="setBadgeStyle('rectnum',this)">
+      <div class="preview" id="bsPrev_rectnum">
+        <div id="bsRect" style="width:24px;height:24px;border-radius:6px;background:#fff;display:flex;align-items:center;justify-content:center;margin-left:6px;flex-shrink:0;">
+          <span id="bsRectNum" style="font-size:9px;font-weight:900;color:#C30452">11</span>
+        </div>
+        <span style="font-size:10px;font-weight:800;color:#fff;flex:1;text-align:center;">홍길동</span>
+      </div>
+      <div class="lbl">사각형 번호</div>
+    </div>
+    <div class="badge-style-opt selected" id="bsOpt_separator" onclick="setBadgeStyle('separator',this)">
+      <div class="preview" id="bsPrev_separator">
+        <span style="font-size:10px;font-weight:900;color:#fff;padding:0 8px;flex-shrink:0;">11</span>
+        <div style="width:1.5px;height:18px;background:rgba(255,255,255,0.45);flex-shrink:0;"></div>
+        <span style="font-size:10px;font-weight:800;color:#fff;flex:1;text-align:center;">홍길동</span>
+      </div>
+      <div class="lbl">세로선 구분</div>
+    </div>
+    <div class="badge-style-opt" id="bsOpt_nameonly" onclick="setBadgeStyle('nameonly',this)">
+      <div class="preview" id="bsPrev_nameonly">
+        <span style="font-size:10px;font-weight:800;color:#fff;flex:1;text-align:center;">홍길동</span>
+      </div>
+      <div class="lbl">이름만</div>
+    </div>
+  </div>
+
+  <div class="slider-group">
+    <div class="slider-row">
+      <span class="slider-label">세로 위치</span>
+      <input type="range" id="badgeY" min="0" max="92" value="2" oninput="onSlider('badgeY',this.value,'%')">
+      <input type="number" class="slider-val" id="badgeYVal" value="2" min="0" max="92" data-unit="%" onchange="onValInput('badgeY',this)" onkeydown="if(event.key==='Enter')this.blur()">
+    </div>
+    <div class="slider-row">
+      <span class="slider-label">가로 위치</span>
+      <input type="range" id="badgeXOffset" min="-45" max="45" value="0" oninput="onSlider('badgeXOffset',this.value,'%')">
+      <input type="number" class="slider-val" id="badgeXOffsetVal" value="0" min="-45" max="45" data-unit="%" onchange="onValInput('badgeXOffset',this)" onkeydown="if(event.key==='Enter')this.blur()">
+    </div>
+    <div class="slider-row">
+      <span class="slider-label">너비</span>
+      <input type="range" id="badgeW" min="30" max="99" value="80" oninput="onSlider('badgeW',this.value,'%')">
+      <input type="number" class="slider-val" id="badgeWVal" value="80" min="30" max="99" data-unit="%" onchange="onValInput('badgeW',this)" onkeydown="if(event.key==='Enter')this.blur()">
+    </div>
+    <div class="slider-row">
+      <span class="slider-label">글자 크기</span>
+      <input type="range" id="fontSize" min="12" max="70" value="36" oninput="onSlider('fontSize',this.value,'px')">
+      <input type="number" class="slider-val" id="fontSizeVal" value="36" min="12" max="70" data-unit="px" onchange="onValInput('fontSize',this)" onkeydown="if(event.key==='Enter')this.blur()">
+    </div>
+  </div>
+</div>
+
+</div><!-- /로고+이름표 2열 끝 -->
+
+<!-- 미리보기 그리드 -->
+<div class="panel" style="padding:14px 18px;">
+  <div class="preview-header">
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+      <div class="panel-title" style="margin-bottom:0;border-bottom:none;padding-bottom:0;">전체 미리보기 <span id="countBadge" style="font-size:11px;font-weight:400;color:var(--sub)"></span></div>
+      <button class="btn btn-gray" style="padding:5px 11px;font-size:11px;" id="selAllBtn" onclick="toggleSelectAll()" disabled>전체 선택</button>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+      <button class="btn btn-red" style="padding:6px 14px;font-size:11px;" id="dlSelBtn" onclick="downloadSelected()" disabled>선택 다운로드 <span id="selCount" style="font-size:10px;opacity:.85;"></span></button>
+      <button class="btn btn-gray" style="padding:6px 12px;font-size:11px" id="dlBtn" onclick="downloadAll()" disabled>전체 다운로드</button>
+    </div>
+  </div>
+  <div class="preview-grid" id="previewGrid">
+    <!-- 빈 상태: 안내 카드 1개 + 빈 placeholder 여러 개 -->
+    <div class="empty-state" style="grid-column:1/-1;display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:12px;padding:0;border:none;background:none;">
+      <!-- 안내 카드 -->
+      <div style="border-radius:6px;border:1.5px dashed var(--accent);background:var(--accent-light);aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:8px;">
+        <div style="width:36px;height:36px;border-radius:50%;background:#fff;border:1.5px solid var(--accent);display:flex;align-items:center;justify-content:center;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7C4DFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        </div>
+        <div style="font-size:10px;font-weight:700;color:var(--accent);text-align:center;line-height:1.4;">사진 불러오면<br>여기 표시</div>
+      </div>
+      <!-- 빈 placeholder 카드들 -->
+      <div class="empty-card"></div>
+      <div class="empty-card"></div>
+      <div class="empty-card"></div>
+      <div class="empty-card"></div>
+      <div class="empty-card"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const TEAMS=[
+  // 색상 출처: Wikipedia KBO 구단 페이지 + 공식 브랜드 교차검증 (2025)
+  {id:'lg',     name:'LG 트윈스',    main:'#C30452',sub:'#000000',text:'#FFFFFF'}, // Crimson · Black
+  {id:'kt',     name:'KT 위즈',      main:'#000000',sub:'#ED1C24',text:'#FFFFFF'}, // Black · Red
+  {id:'ssg',    name:'SSG 랜더스',   main:'#CE0E2D',sub:'#FFB81C',text:'#FFFFFF'}, // Red · Gold
+  {id:'nc',     name:'NC 다이노스',  main:'#071D49',sub:'#BCA474',text:'#FFFFFF'}, // Navy · Gold
+  {id:'doosan', name:'두산 베어스',  main:'#131230',sub:'#BE0000',text:'#FFFFFF'}, // Dark Navy · Red
+  {id:'kia',    name:'KIA 타이거즈', main:'#EA0029',sub:'#000000',text:'#FFFFFF'}, // Red · Black
+  {id:'lotte',  name:'롯데 자이언츠',main:'#002B5B',sub:'#CE1126',text:'#FFFFFF'}, // Navy · Red
+  {id:'samsung',name:'삼성 라이온즈',main:'#0F4F9E',sub:'#6CACE4',text:'#FFFFFF'}, // Royal Blue · Sky Blue
+  {id:'hanwha', name:'한화 이글스',  main:'#F37321',sub:'#002244',text:'#FFFFFF'}, // Orange · Navy
+  {id:'kiwoom', name:'키움 히어로즈',main:'#820024',sub:'#FFFFFF', text:'#FFFFFF'}, // Burgundy · White
+];
+
+// 프레임 = 이미지 표시 영역의 1.5배
+const IMG_AREA  = 400;                          // 사진이 차지하는 영역 (px)
+const FRAME     = Math.round(IMG_AREA * 1.5);  // 600 — 실제 캔버스/출력 크기
+const IMG_OFF   = (FRAME - IMG_AREA) / 2;      // 100 — 사진 주변 여백
+
+// ── 조절 설정값 ── (모두 FRAME 기준 %)
+const cfg = {
+  logoX: 82, logoY: 82, logoSize: 10,
+  badgeY: 2, badgeW: 80, badgeXOffset: 0, fontSize: 36,
+  badgeStyle: 'separator',
+  logoStyle: 'none',    // 'none' | 'rect' | 'circle'
+  imgScale: 100,    // % (50~200)
+  imgXOffset: 0,    // % of IMG_AREA (-50~+50)
+  imgYOffset: 0,    // % of IMG_AREA (-50~+50)
+};
+
+let selectedTeam=TEAMS[0], loadedFiles=[], logoImg=null, canvasCache={};
+let liveDebounce=null, previewCanvasMap={};
+
+// ── 배지 스타일 미리보기 색상 업데이트 ──
+function updateBadgePreviews(){
+  const t = selectedTeam;
+  ['circle','separator','nameonly','rectnum'].forEach(s=>{
+    const el = document.getElementById('bsPrev_'+s);
+    if(el) el.style.background = t.main;
+  });
+  // 원형/사각형 번호: 배경=흰색 고정, 글자=main색
+  const circleNum = document.getElementById('bsCircleNum');
+  if(circleNum) circleNum.style.color = t.main;
+  const rectNum = document.getElementById('bsRectNum');
+  if(rectNum) rectNum.style.color = t.main;
+}
+
+// ── 초기화 ──
+window.onload=()=>{
+  document.getElementById('teamGrid').innerHTML=TEAMS.map((t,i)=>`
+    <div class="team-btn ${i===0?'selected':''}" id="tb_${t.id}" onclick="selectTeam(${i})">
+      <div class="team-check">✓</div>
+      <div class="color-bar" style="background:${t.main};color:${t.text}">${t.name}</div>
+    </div>`).join('');
+  updateBadgePreviews(); // 초기 팀 색상 적용
+};
+
+// ── 슬라이더 공통 핸들러 ──
+function onValInput(key, input) {
+  const slider = document.getElementById(key);
+  const min = parseFloat(slider.min), max = parseFloat(slider.max);
+  let val = parseFloat(input.value);
+  if(isNaN(val)) val = cfg[key];
+  val = Math.min(max, Math.max(min, val));
+  input.value = val;
+  slider.value = val;
+  cfg[key] = val;
+  canvasCache={};
+  scheduleLiveUpdate();
+}
+function onSlider(key, val, unit) {
+  cfg[key] = parseFloat(val);
+  document.getElementById(key+'Val').value = parseFloat(val);
+  canvasCache={};
+  scheduleLiveUpdate();
+}
+
+function scheduleLiveUpdate() {
+  clearTimeout(liveDebounce);
+  liveDebounce = setTimeout(()=>{
+    updateLivePreview();
+    buildPreview();
+  }, 120);
+}
+
+// ── 팀 선택 ──
+function setLogoStyle(style, el){
+  cfg.logoStyle = style;
+  document.querySelectorAll('.logo-style-opt').forEach(b=>b.classList.remove('selected'));
+  el.classList.add('selected');
+  canvasCache={};
+  scheduleLiveUpdate();
+}
+
+function setBadgeStyle(style, el){
+  cfg.badgeStyle = style;
+  document.querySelectorAll('.badge-style-opt').forEach(b=>b.classList.remove('selected'));
+  el.classList.add('selected');
+  canvasCache={};
+  scheduleLiveUpdate();
+}
+
+function selectTeam(i){
+  document.querySelectorAll('.team-btn').forEach(b=>b.classList.remove('selected'));
+  document.getElementById(`tb_${TEAMS[i].id}`).classList.add('selected');
+  selectedTeam=TEAMS[i]; canvasCache={};
+  updateBadgePreviews();
+  updateLivePreview(); buildPreview();
+}
+
+// ── 로고 선택 ──
+function onLogoSelected(input){
+  const file=input.files[0]; if(!file) return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    const img=new Image();
+    img.onload=()=>{
+      logoImg=img;
+      canvasCache={};
+      document.getElementById('logoThumb').innerHTML=
+        `<img src="${e.target.result}" style="width:100%;height:100%;object-fit:contain;display:block;">`;
+      document.getElementById('logoName').textContent=file.name;
+      document.getElementById('logoSliderGroup').style.opacity='1';
+      document.getElementById('logoSliderGroup').style.pointerEvents='auto';
+      document.getElementById('logoNoUpload').style.display='none';
+      updateLivePreview(); buildPreview();
+    };
+    img.onerror=()=>console.error('로고 이미지 로드 실패');
+    img.src=e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+// ── 파일 선택 ──
+function onFilesSelected(input){
+  const files=Array.from(input.files).filter(f=>/\.(png|jpe?g|webp)$/i.test(f.name));
+  if(!files.length){setStatus('이미지 파일이 없습니다.','err');return;}
+  loadedFiles=files.map(f=>({name:f.name, file:f})); canvasCache={};
+  setStatus(`${files.length}개 사진 로드 완료`,'ok');
+  document.getElementById('dlBtn').disabled=false;
+  updateLivePreview(); buildPreview();
+}
+
+// ── 실시간 미리보기 (첫 번째 사진) ──
+async function updateLivePreview(){
+  const lc=document.getElementById('liveCanvas');
+  const ph=document.getElementById('livePlaceholder');
+  if(!loadedFiles.length){ lc.style.display='none'; ph.style.display=''; return; }
+
+  // 첫 파일 실패 시 다음 파일로 순차 시도
+  for(const f of loadedFiles.slice(0,5)){
+    try{
+      const {canvas}=await makeSticker(f, true);
+      lc.width=canvas.width; lc.height=canvas.height;
+      lc.getContext('2d').drawImage(canvas,0,0);
+      lc.style.display='block'; ph.style.display='none';
+      return;
+    }catch(e){ console.warn('live preview skip:', f.name, e.message); }
+  }
+}
+
+// ── 전체 미리보기 그리드 ──
+async function buildPreview(){
+  if(!loadedFiles.length) return;
+  const grid=document.getElementById('previewGrid');
+  const targets=loadedFiles.slice(0,20);
+  previewCanvasMap={};
+  const results=[];
+  for(const f of targets){ const r=await makeSticker(f); previewCanvasMap[f.name]=r.canvas; results.push(r); await tick(); }
+
+  grid.innerHTML='';
+  results.forEach(({canvas,name})=>{
+    const div=document.createElement('div');
+    div.className='preview-item'; div.dataset.name=name;
+
+    // 썸네일 캔버스
+    const mini=document.createElement('canvas'); mini.width=120; mini.height=120;
+    mini.getContext('2d').drawImage(canvas,0,0,120,120);
+
+    // 파일명 라벨
+    const label=document.createElement('div'); label.className='preview-name';
+    label.textContent=name.replace(/\.[^.]+$/,'');
+
+    // 체크박스 — 캔버스 아래 버튼 형태
+    const chk=document.createElement('div'); chk.className='preview-check';
+    chk.innerHTML<`<span class="chk-box"><svg width="8" height="6" viewBox="0 0 8 6"><polyline points="1,3 3,5 7,1" stroke="white" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>선택</span>`;
+
+    div.onclick=()=>{
+      div.classList.toggle('checked');
+      const span=div.querySelector('.preview-check span:last-child');
+      if(span) span.textContent=div.classList.contains('checked')?'선택됨':'선택';
+      updateSelCount();
+    };
+    div.append(mini,label,chk);
+    grid.appendChild(div);
+  });
+
+  if(loadedFiles.length>20){
+    const more=document.createElement('div');
+    more.style.cssText='grid-column:1/-1;text-align:center;padding:12px;color:var(--sub);font-size:11px';
+    more.textContent=`… 외 ${loadedFiles.length-20}개 (일괄 생성 & 저장으로 전체 처리)`;
+    grid.appendChild(more);
+  }
+  document.getElementById('countBadge').textContent=`(총 ${loadedFiles.length}개)`;
+  document.getElementById('selAllBtn').disabled=false;
+  updateSelCount();
+}
+
+// ── 선택 카운트 업데이트 ──
+function updateSelCount(){
+  const n=document.querySelectorAll('.preview-item.checked').length;
+  document.getElementById('selCount').textContent=n?`(${n}개)`:'';
+  document.getElementById('dlSelBtn').disabled=n===0;
+  // 전체선택 버튼 텍스트
+  const total=document.querySelectorAll('.preview-item').length;
+  document.getElementById('selAllBtn').textContent=n===total&&total>0?'전체 해제':'전체 선택';
+}
+
+// ── 전체 선택/해제 ──
+function toggleSelectAll(){
+  const items=document.querySelectorAll('.preview-item');
+  const allChecked=[...items].every(el=>el.classList.contains('checked'));
+  items.forEach(el=>el.classList.toggle('checked',!allChecked));
+  updateSelCount();
+}
+
+// ── 선택 항목 다운로드 ──
+async function downloadSelected(){
+  const checked=[...document.querySelectorAll('.preview-item.checked')];
+  if(!checked.length) return;
+  const btn=document.getElementById('dlSelBtn'); btn.disabled=true;
+
+  // 폴더 저장 시도
+  let saveDir=null;
+  try{ saveDir=await window.showDirectoryPicker({mode:'readwrite'}); }
+  catch(e){
+    if(e.name==='AbortError'){ btn.disabled=false; updateSelCount(); return; }
+    // 미지원 브라우저 → 개별 다운로드 폴백
+  }
+
+  const pw=document.getElementById('progressWrap'); pw.style.display='block';
+  const total=checked.length;
+  for(let i=0;i<total;i++){
+    const name=checked[i].dataset.name;
+    setProgress(i,total,name); await tick();
+    const canvas=previewCanvasMap[name]
+      ||(await makeSticker(loadedFiles.find(f=>f.name===name))).canvas;
+
+    if(saveDir){
+      try{
+        const blob=await toBlob(canvas);
+        const fh=await saveDir.getFileHandle(name.replace(/\.[^.]+$/,'')+'.png',{create:true});
+        const w=await fh.createWritable(); await w.write(blob); await w.close();
+      }catch(e2){ console.warn('skip:',name,e2); }
+    } else {
+      dlSingle(canvas,name); await sleep(120);
+    }
+  }
+  setProgress(total,total,'');
+  setStatus(`${total}개 저장 완료!`,'ok');
+  btn.disabled=false; updateSelCount();
+  setTimeout(()=>{ pw.style.display='none'; },3500);
+}
+
+// ── 스티커 그리기 ──
+async function makeSticker({name,file}, noCache=false){
+  const key=`${name}_${selectedTeam.id}_${JSON.stringify(cfg)}`;
+  if(!noCache && canvasCache[key]) return {canvas:canvasCache[key],name};
+
+  const img=await loadImg(file);
+
+  // ── 캔버스: FRAME x FRAME, 투명 배경 ──
+  const c=document.createElement('canvas'); c.width=FRAME; c.height=FRAME;
+  const ctx=c.getContext('2d');
+  ctx.clearRect(0,0,FRAME,FRAME);
+
+  // ── 사진: 크기·위치 조절값 반영, 클립 없이 FRAME 전체 사용 ──
+  const baseScale = Math.max(IMG_AREA/img.width, IMG_AREA/img.height);
+  const sc  = baseScale * (cfg.imgScale / 100);
+  const dw  = img.width  * sc;
+  const dh  = img.height * sc;
+  const xOff = FRAME * (cfg.imgXOffset / 100);
+  const yOff = FRAME * (cfg.imgYOffset / 100);
+  ctx.drawImage(img, IMG_OFF+(IMG_AREA-dw)/2+xOff, IMG_OFF+(IMG_AREA-dh)/2+yOff, dw, dh);
+
+  // ── 이름 파싱 ──
+  const raw=name.replace(/\.[^.]+$/,'');
+  let num='', pname=raw;
+  const m=raw.match(/^(\d+)[_\s\-]?(.+)$/)||raw.match(/^(.+?)[_\s\-](\d+)$/);
+  if(m){ if(/^\d+$/.test(m[1])){num=m[1];pname=m[2];}else{pname=m[1];num=m[2];} }
+
+  // ── 이름 배지 (FRAME 기준 위치) ──
+  const FS = cfg.fontSize;
+  const BH = Math.round(FS*1.8);
+  const BW = FRAME*(cfg.badgeW/100);
+  const BX = (FRAME-BW)/2 + FRAME*(cfg.badgeXOffset/100);
+  const BY = FRAME - BH - FRAME*(cfg.badgeY/100);
+
+  // ── 배지 배경 — rectnum은 라운드 사각, 나머지는 pill ──
+  const badgeR = cfg.badgeStyle === 'rectnum' ? BH*0.22 : BH/2;
+  ctx.beginPath(); rrect(ctx,BX,BY,BW,BH,badgeR);
+  ctx.fillStyle=selectedTeam.main; ctx.fill();
+
+  const cy = BY + BH/2;
+  const FONT = `'NanumSquare','Apple SD Gothic Neo','Malgun Gothic',sans-serif`;
+
+  // 공통 헬퍼: 너비 제한 내에서 폰트 크기 자동 축소
+  function fitText(text, weight, maxW, startFS){
+    let fs = startFS;
+    ctx.font = `${weight} ${fs}px ${FONT}`;
+    while(ctx.measureText(text).width > maxW && fs > 12){ fs -= 1; ctx.font = `${weight} ${fs}px ${FONT}`; }
+    return fs;
+  }
+
+  // ── 공통 레이아웃 상수 (separator 기준으로 통일) ──
+  const hasNum    = num && num.trim() !== '';
+  const NUM_RATIO = 0.32;                        // 번호 영역: 배지 너비의 32%
+  const numZone   = BW * NUM_RATIO;
+  const lineX     = BX + numZone;
+  const nameZone  = BW - numZone;
+  const nameCX    = lineX + nameZone / 2;        // 이름 중앙 X (모든 스타일 공통)
+  const numCX     = BX + numZone / 2;            // 번호 중앙 X (모든 스타일 공통)
+
+  if(cfg.badgeStyle === 'circle'){
+    // 원형 번호 — numZone 안에 꽉 맞게
+    if(hasNum){
+      const cr = Math.min(numZone * 0.42, BH * 0.44);
+      ctx.beginPath(); ctx.arc(numCX, cy, cr, 0, Math.PI*2);
+      ctx.fillStyle = '#ffffff'; ctx.fill();
+      ctx.fillStyle = selectedTeam.main;
+      fitText(num, '800', cr * 1.6, FS);
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillText(num, numCX, cy);
+    }
+    const nx = hasNum ? nameCX : BX + BW / 2;
+    const nw = BW * (hasNum ? nameZone / BW * 0.88 : 0.88);
+    fitText(pname, '800', nw, FS);
+    ctx.fillStyle = selectedTeam.text;
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText(pname, nx, cy);
+
+  } else if(cfg.badgeStyle === 'rectnum'){
+    // 사각형 라운드 번호 — numZone 안에 맞게
+    if(hasNum){
+      const bh = BH * 0.72;
+      fitText(num, '800', numZone * 0.72, FS);
+      const bw = Math.min(Math.max(bh, ctx.measureText(num).width + bh * 0.45), numZone * 0.90);
+      const bx = numCX - bw / 2, by = BY + (BH - bh) / 2;
+      ctx.beginPath(); rrect(ctx, bx, by, bw, bh, bh * 0.28);
+      ctx.fillStyle = '#ffffff'; ctx.fill();
+      ctx.fillStyle = selectedTeam.main;
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillText(num, numCX, cy);
+    }
+    const nx = hasNum ? nameCX : BX + BW / 2;
+    const nw = BW * (hasNum ? nameZone / BW * 0.88 : 0.88);
+    fitText(pname, '800', nw, FS);
+    ctx.fillStyle = selectedTeam.text;
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText(pname, nx, cy);
+
+  } else if(cfg.badgeStyle === 'separator'){
+    // 번호 | 세로선 | 이름
+    if(hasNum){
+      fitText(num, '800', numZone * 0.78, FS);
+      ctx.fillStyle = selectedTeam.text;
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillText(num, numCX, cy);
+      ctx.beginPath(); ctx.moveTo(lineX, BY + BH * 0.2); ctx.lineTo(lineX, BY + BH * 0.8);
+      ctx.strokeStyle = selectedTeam.text + '99'; ctx.lineWidth = 2; ctx.stroke();
+      fitText(pname, '800', nameZone * 0.85, FS);
+      ctx.fillStyle = selectedTeam.text;
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillText(pname, nameCX, cy);
+    } else {
+      fitText(pname, '800', BW * 0.88, FS);
+      ctx.fillStyle = selectedTeam.text;
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillText(pname, BX + BW / 2, cy);
+    }
+
+  } else {
+    // 이름만
+    fitText(pname, '800', BW * 0.88, FS);
+    ctx.fillStyle = selectedTeam.text;
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText(pname, BX + BW / 2, cy);
+  }
+
+  // 로고
+  if(logoImg){
+    const LR = FRAME*(cfg.logoSize/100);
+    const LX = FRAME*(cfg.logoX/100), LY = FRAME*(cfg.logoY/100);
+
+    // 원본 비율 유지: LR*2 bounding box 안에 fit
+    const aspect = logoImg.width / logoImg.height;
+    const lw = aspect >= 1 ? LR*2 : LR*2*aspect;
+    const lh = aspect >= 1 ? LR*2/aspect : LR*2;
+    const ldx = LX - lw/2, ldy = LY - lh/2;
+
+    if(cfg.logoStyle === 'circle'){
+      // 원형 클립 + 흰 테두리 (반지름은 짧은 변 기준)
+      const cr = Math.min(lw, lh)/2;
+      ctx.beginPath(); ctx.arc(LX,LY,cr+3,0,Math.PI*2); ctx.fillStyle='#fff'; ctx.fill();
+      ctx.save(); ctx.beginPath(); ctx.arc(LX,LY,cr,0,Math.PI*2); ctx.clip();
+      ctx.drawImage(logoImg,ldx,ldy,lw,lh); ctx.restore();
+      ctx.beginPath(); ctx.arc(LX,LY,cr+1,0,Math.PI*2);
+      ctx.strokeStyle='rgba(255,255,255,0.6)'; ctx.lineWidth=2; ctx.stroke();
+
+    } else if(cfg.logoStyle === 'rect'){
+      // 사각형 흰 배경 (이미지 크기 + 패딩)
+      const pad = Math.min(lw,lh)*0.15;
+      const rx=ldx-pad, ry=ldy-pad, rw=lw+pad*2, rh=lh+pad*2, rr=Math.min(rw,rh)*0.15;
+      ctx.beginPath(); rrect(ctx,rx,ry,rw,rh,rr); ctx.fillStyle='#fff'; ctx.fill();
+      ctx.drawImage(logoImg,ldx,ldy,lw,lh);
+      ctx.beginPath(); rrect(ctx,rx,ry,rw,rh,rr);
+      ctx.strokeStyle='rgba(255,255,255,0.4)'; ctx.lineWidth=1.5; ctx.stroke();
+
+    } else {
+      // 원본: 배경 없이 그대로
+      ctx.drawImage(logoImg,ldx,ldy,lw,lh);
+    }
+  }
+
+  if(!noCache) canvasCache[key]=c;
+  return {canvas:c,name};
+}
+
+function rrect(ctx,x,y,w,h,r){
+  ctx.moveTo(x+r,y); ctx.lineTo(x+w-r,y); ctx.arcTo(x+w,y,x+w,y+r,r);
+  ctx.lineTo(x+w,y+h-r); ctx.arcTo(x+w,y+h,x+w-r,y+h,r);
+  ctx.lineTo(x+r,y+h); ctx.arcTo(x,y+h,x,y+h-r,r);
+  ctx.lineTo(x,y+r); ctx.arcTo(x,y,x+r,y,r); ctx.closePath();
+}
+
+// ── 일괄 생성 & 저장 ──
+async function generateAll(){
+  if(!loadedFiles.length) return;
+  const btn=document.getElementById('genBtn'); btn.disabled=true; canvasCache={};
+  let saveDir=null;
+  try{ saveDir=await window.showDirectoryPicker({mode:'readwrite'}); }
+  catch(e){
+    if(e.name==='AbortError'){btn.disabled=false;return;}
+    setStatus('폴더 저장 미지원 → 개별 다운로드합니다 (Chrome 권장)','');
+    await downloadAll(); btn.disabled=false; return;
+  }
+  const pw=document.getElementById('progressWrap'); pw.style.display='block';
+  try{
+    const sub=await saveDir.getDirectoryHandle('띠부실_PNG',{create:true});
+    const total=loadedFiles.length;
+    for(let i=0;i<total;i++){
+      const f=loadedFiles[i]; setProgress(i,total,f.name); await tick();
+      try{
+        const {canvas}=await makeSticker(f);
+        const blob=await toBlob(canvas);
+        const fh=await sub.getFileHandle(f.name.replace(/\.[^.]+$/,'')+'.png',{create:true});
+        const w=await fh.createWritable(); await w.write(blob); await w.close();
+      }catch(e2){console.warn('skip:',f.name,e2);}
+    }
+    setProgress(total,total,'');
+    setStatus(`완료! 선택 폴더 > 띠부실_PNG 에 ${total}개 저장됐습니다.`,'ok');
+  }catch(e){setStatus('저장 오류: '+e.message,'err');}
+  btn.disabled=false;
+  setTimeout(()=>{pw.style.display='none';},4000);
+}
+
+// ── 단일 파일 다운로드 ──
+function dlSingle(canvas, name){
+  canvas.toBlob(blob=>{
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = name.replace(/\.[^.]+$/,'') + '.png';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(()=>URL.revokeObjectURL(url), 1500);
+  }, 'image/png');
+}
+async function downloadAll(){
+  if(!loadedFiles.length) return; canvasCache={};
+  document.getElementById('progressWrap').style.display='block';
+  const total=loadedFiles.length;
+  for(let i=0;i<total;i++){
+    setProgress(i,total,loadedFiles[i].name); await tick();
+    const {canvas,name}=await makeSticker(loadedFiles[i]);
+    dlSingle(canvas,name); await sleep(150);
+  }
+  setProgress(total,total,''); setStatus('전체 다운로드 완료!','ok');
+  setTimeout(()=>{document.getElementById('progressWrap').style.display='none';},3000);
+}
+
+// ── 유틸 ──
+function loadImg(file){
+  return new Promise((res,rej)=>{
+    const reader=new FileReader();
+    reader.onload=e=>{
+      const img=new Image();
+      img.onload=()=>res(img);
+      img.onerror=()=>rej(new Error('디코드 실패: '+file.name));
+      img.src=e.target.result;
+    };
+    reader.onerror=()=>rej(new Error('파일 읽기 실패: '+file.name));
+    reader.readAsDataURL(file);
+  });
+}
+function toBlob(c){return new Promise(r=>c.toBlob(r,'image/png'));}
+function tick(){return new Promise(r=>setTimeout(r,0));}
+function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
+function setStatus(msg,type){
+  const el=document.getElementById('statusBox');
+  el.textContent=msg; el.className='status'+(type?' '+type:'');
+}
+function setProgress(done,total,label){
+  document.getElementById('progressFill').style.width=(total?done/total*100:0)+'%';
+  document.getElementById('progressText').textContent=
+    done>=total?`${total}개 완료!`:`처리 중: ${label} (${done+1}/${total})`;
+}
+</script>
 </body>
 </html>
